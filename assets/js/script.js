@@ -105,8 +105,6 @@ var createTaskActions = function (taskId) {
     return actionContainerEl;
 };
 
-formEl.addEventListener("submit", taskFormHandler);
-
 var taskButtonHandler = function (event) {
     var targetEl = event.target;
 
@@ -261,6 +259,24 @@ var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+// gets task items from localStorage
+// converts tasks from the string format back into an array of objects
+// iterates through a tasks array and creates task elements on the page from it
+var loadTasks = function() {
+    var savedTasks = localStorage.getItem("tasks")
+    if (!saveTasks) {
+        return false;
+    }
+
+    savedTasks = JSON.parse(savedTasks);
+
+    for (var i = 0; i < savedTasks.length; i++) {
+        createTaskEl(savedTasks[i]);
+    }
+};
+
+formEl.addEventListener("submit", taskFormHandler);
+
 pageContentEl.addEventListener("click", taskButtonHandler);
 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
@@ -272,3 +288,5 @@ pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 pageContentEl.addEventListener("drop", dropTaskHandler);
 
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
+
+loadTasks();
